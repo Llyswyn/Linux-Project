@@ -1,86 +1,141 @@
 #!/bin/bash
 
 # function to create user accounts and set permissions
+
 create_user() {
-  echo "Enter the new user's name:"
-  read username
 
-  echo "Select the user type:"
-  echo "1. Linux Administrator or Network Administrator"
-  echo "2. Software Engineer"
-  echo "3. Application Analyst"
-  read usertype
+echo "Enter the new user's name:"
 
-  case $usertype in
-    1)
-      sudo useradd $username
-      sudo usermod -aG sudo $username
-      sudo chown -R $username:$username /home/$username
-      sudo chmod -R 700 /home/$username
-      ;;
-    2)
-      sudo useradd $username
-      sudo chown -R $username:$username /home/$username
-      sudo chmod -R 750 /home/$username
-      ;;
-    3)
-      sudo useradd $username
-      sudo chown -R $username:$username /home/$username
-      sudo chmod -R 755 /home/$username
-      ;;
-    *)
-      echo "Invalid input. Please try again."
-      create_user
-      ;;
-  esac
+read username
 
-  echo "User created successfully."
+echo "Select the user type:"
+
+echo "1. Linux Administrator or Network Administrator"
+
+echo "2. Software Engineer"
+
+echo "3. Application Analyst"
+
+read usertype
+
+case $usertype in
+
+1)
+
+useradd $username
+
+usermod -aG sudo $username
+
+chown -R $username:$username /home/$username
+
+chmod -R 700 /home/$username
+
+;;
+
+2)
+
+useradd $username
+
+chown -R $username:$username /home/$username
+
+chmod -R 750 /home/$username
+
+;;
+
+3)
+
+useradd $username
+
+chown -R $username:$username /home/$username
+
+chmod -R 755 /home/$username
+
+;;
+
+*)
+
+echo "Invalid input. Please try again."
+
+create_user
+
+;;
+
+esac
+
+echo "User created successfully."
+
 }
 
 # function to create disk partitions and filesystems
+
 create_partitions() {
-  echo "Enter the disk name (e.g. /dev/sda):"
-  read disk
 
-  sudo parted $disk mklabel gpt
-  sudo parted $disk mkpart primary ext4 0% 100%
-  sudo mkfs.ext4 ${disk}1
+echo "Enter the disk name (e.g. /dev/sda):"
 
-  echo "Disk partitions and filesystem created successfully."
+read disk
+
+parted $disk mklabel gpt
+
+parted $disk mkpart primary ext4 0% 100%
+
+mkfs.ext4 ${disk}1
+
+echo "Disk partitions and filesystem created successfully."
+
 }
 
 # function to set up a cron job
+
 setup_cron() {
-  echo "Enter the command to be executed:"
-  read command
 
-  echo "Enter the schedule (e.g. * * * * * for every minute):"
-  read schedule
+echo "Enter the command to be executed:"
 
-  (crontab -l ; echo "$schedule $command") | sort - | uniq - | crontab -
-  echo "Cron job set up successfully."
+read command
+
+echo "Enter the schedule (e.g. * * * * * for every minute):"
+
+read schedule
+
+(crontab -l ; echo "$schedule $command") | sort - | uniq - | crontab -
+
+echo "Cron job set up successfully."
+
 }
 
 # function to install compression software and compress files
-compress_files() {
-  echo "Enter the directory to be compressed:"
-  read directory
 
-  sudo apt-get install gzip
-  sudo gzip -r $directory
-  echo "Files compressed successfully."
+compress_files() {
+
+echo "Enter the directory to be compressed:"
+
+read directory
+
+apt-get install gzip
+
+gzip -r $directory
+
+echo "Files compressed successfully."
+
 }
 
 # function to set up an Apache web server
-setup_apache() {
-  echo "Enter the website name:"
-  read website
 
-  sudo apt-get install apache2
-  sudo systemctl start apache2
-  sudo systemctl enable apache2
-  sudo echo "<html><body><h1>Welcome to $website</h1></body></html>" > /var/www/html/index.html
-  echo "Apache web server set up successfully."
+setup_apache() {
+
+echo "Enter the website name:"
+
+read website
+
+apt-get install apache2
+
+systemctl start apache2
+
+systemctl enable apache2
+
+echo "<html><body><h1>Welcome to $website</h1></body></html>" > /var/www/html/index.html
+
+echo "Apache web server set up successfully."
+
 }
 
 # function to add password requirements and encrypt sensitive files
@@ -91,54 +146,95 @@ echo "Enter the username for which to set password requirements:"
 
 read username
 
-sudo apt-get install libpam-pwquality
+apt-get install libpam-pwquality
 
-sudo sed -i 's/# minlen = 8/minlen = 10/g' /etc/security/pwquality.conf
+sed -i 's/# minlen = 8/minlen = 10/g' /etc/security/pwquality.conf
 
 }
 
-    # Main menu
+# Main menu
 
-    while true
-    do
-        echo "======================="
-        echo "    IT Firm Menu"
-        echo "======================="
-        echo "1. Create user"
-        echo "2. Create disk partitions and filesystems"
-        echo "3. Set up a cron job"
-        echo "4. Install compression software and compress files"
-        echo "5. Set up an Apache web server"
-        echo "6. Add password requirements and encrypt sensitive files"
-        echo "7. Exit"
-        echo "======================="
-        echo "Enter your choice: "
-        read choice
+while true
 
-        case $choice in
-            1)
-                create_user
-                ;;
-            2)
-                create_partitions
-                ;;
-            3)
-                setup_cron
-                ;;
-            4)
-                compress_files
-                ;;
-            5)
-                setup_apache
-                ;;
-            6)
-                add_security
-                ;;
-            7)
-                exit 0
-                ;;
-            *)
-                echo "Invalid choice. Try again."
-                ;;
-        esac
-    done
+do
+
+echo "======================="
+
+echo " IT Firm Menu"
+
+echo "======================="
+
+echo "1. Create user"
+
+echo "2. Create disk partitions and filesystems"
+
+echo "3. Set up a cron job"
+
+echo "4. Install compression software and compress files"
+
+echo "5. Set up an Apache web server"
+
+echo "6. Add password requirements and encrypt sensitive files"
+
+echo "7. Exit"
+
+echo "======================="
+
+echo "Enter your choice: "
+
+read choice
+
+case $choice in
+
+1)
+
+create_user
+
+;;
+
+2)
+
+create_partitions
+
+;;
+
+3)
+
+setup_cron
+
+;;
+
+4)
+
+compress_files
+
+;;
+
+5)
+
+setup_apache
+
+;;
+
+6)
+
+add_security
+
+;;
+
+7)
+
+exit 0
+
+;;
+
+*)
+
+echo "Invalid choice. Try again."
+
+;;
+
+esac
+
+done
+
